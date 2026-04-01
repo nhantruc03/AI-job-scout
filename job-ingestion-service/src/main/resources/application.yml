@@ -1,0 +1,25 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    com.ailab: DEBUG
+
+spring:
+  application:
+    name: job-ingestion-service
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# LocalStack AWS Configuration
+aws:
+  region: us-east-1
+  endpoint: http://localhost:4566
+  access-key: test              # Mock key for LocalStack
+  secret-key: test              # Mock key for LocalStack
+  s3:
+    bucket-name: target-jd-bucket
+  dynamodb:
+    table-name: global-job-metadata

@@ -1,0 +1,3 @@
+# check db
+docker exec -it localstack_main awslocal dynamodb scan --table-name global-job-metadata
+
