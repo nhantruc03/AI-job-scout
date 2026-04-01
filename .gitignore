@@ -24,3 +24,6 @@ job-ingestion-service/localstack/
 # OS
 .DS_Store
 Thumbs.db
+
+# Personal Note
+personalNote/
