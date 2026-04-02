@@ -1,4 +1,4 @@
-package com.ailab.ingestion.model;
+package com.ailab.analyzer.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,23 +7,22 @@ import lombok.NoArgsConstructor;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamoDbBean // Giống như @Entity trong Hibernate nhưng dành cho DynamoDB
+@DynamoDbBean
 public class JobMetadata {
     private String jobId;
     private String originalFileName;
     private String s3Key;
-    private String status; // PENDING, ANALYZED
+    private String status;
     private String aiScore;
+    private String createdAt;
     private String aiSummary;
     private String aiSuggestion;
-    private String createdAt;
 
-    @DynamoDbPartitionKey // Định nghĩa Khóa chính (Partition Key)
+    @DynamoDbPartitionKey
     public String getJobId() {
         return jobId;
     }

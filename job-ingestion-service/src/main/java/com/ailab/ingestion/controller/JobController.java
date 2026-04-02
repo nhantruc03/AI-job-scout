@@ -1,7 +1,9 @@
 package com.ailab.ingestion.controller;
 
+import com.ailab.ingestion.model.JobCreatedEvent;
 import com.ailab.ingestion.model.JobMetadata;
 import com.ailab.ingestion.service.DynamoDbService;
+import com.ailab.ingestion.service.JobEventProducer;
 import com.ailab.ingestion.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class JobController {
 
     private final StorageService storageService;
     private final DynamoDbService dynamoDbService;
+    private final JobEventProducer jobEventProducer;
 
     @GetMapping
     public ResponseEntity<List<JobMetadata>> getAllJobs() {
@@ -47,11 +50,18 @@ public class JobController {
                     .status("PENDING")
                     .createdAt(Instant.now().toString())
                     .build();
-            
+
             dynamoDbService.saveJobMetadata(metadata);
 
+            // 3. Publish Event vào Kafka
+            jobEventProducer.publishJobCreated(JobCreatedEvent.builder()
+                    .jobId(jobId)
+                    .s3Key(s3Key)
+                    .status("PENDING")
+                    .build());
+
             return ResponseEntity.ok("Job uploaded successfully. ID: " + jobId);
-            
+
         } catch (IOException e) {
             log.error("Error processing job upload", e);
             return ResponseEntity.internalServerError().body("Upload failed: " + e.getMessage());

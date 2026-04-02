@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "8a3b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d",
+		"name": "AI job-scout System (via Gateway)",
+		"description": "Collection to test Smart Job Scout system via Spring Cloud Gateway (Port 8080)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Upload JD (Ingestion Service)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"description": "The Job Description file (.txt or .pdf)",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/jobs/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"jobs",
+						"upload"
+					]
+				},
+				"description": "Uploads a JD file to the Ingestion Service via Gateway. This will trigger the Kafka event."
+			},
+			"response": []
+		},
+		{
+			"name": "2. Get Analysis Status (Analyzer Service)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/analysis/status/:jobId",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"analysis",
+						"status",
+						":jobId"
+					],
+					"variable": [
+						{
+							"key": "jobId",
+							"value": "REPLACE_WITH_JOB_ID_FROM_UPLOAD_RESPONSE",
+							"description": "The unique Job ID returned from the upload API"
+						}
+					]
+				},
+				"description": "Check the AI analysis results (Score & Summary) stored in DynamoDB via Gateway."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

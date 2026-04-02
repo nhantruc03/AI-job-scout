@@ -12,14 +12,29 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: jobEvent:com.ailab.ingestion.model.JobCreatedEvent
 
 # LocalStack AWS Configuration
 aws:
   region: us-east-1
   endpoint: http://localhost:4566
-  access-key: test              # Mock key for LocalStack
-  secret-key: test              # Mock key for LocalStack
+  access-key: test
+  secret-key: test
   s3:
     bucket-name: target-jd-bucket
   dynamodb:
     table-name: global-job-metadata
+
+# Custom App Configuration
+app:
+  kafka:
+    topics:
+      - name: job-events-topic
+        partitions: 3
+        replicas: 1

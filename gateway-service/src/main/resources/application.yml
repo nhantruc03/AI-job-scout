@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: job-ingestion-route
+          uri: http://localhost:8081
+          predicates:
+            - Path=/jobs/**
+          filters:
+            - StripPrefix=1
+        - id: job-analyzer-route
+          uri: http://localhost:8082
+          predicates:
+            - Path=/analysis/**
+          filters:
+            - StripPrefix=1
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG
