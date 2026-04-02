@@ -1,5 +1,0 @@
-# check db
-docker exec -it localstack_main awslocal dynamodb scan --table-name global-job-metadata
-
-2. **Ollama**: Download and run locally (from [ollama.com](https://ollama.com)).
-- Run `ollama pull llama2` (or your preferred model configured in `application.yml`).
